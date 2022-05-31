@@ -27,26 +27,56 @@ public class AtendenteDao implements IObjDao<Atendente>{
 
 	@Override
 	public void modifica(Atendente at) {
-		// TODO Auto-generated method stub
-		
+		EntityManager entityManager = sf.createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+		transaction.begin();
+		entityManager.merge(at);
+		transaction.commit();
 	}
 
 	@Override
 	public void remove(Atendente at) {
-		// TODO Auto-generated method stub
+		EntityManager entityManager = sf.createEntityManager();
+		EntityTransaction transaction = entityManager.getTransaction();
+		transaction.begin();
+		entityManager.remove(at);
+		transaction.commit();
 		
 	}
 
 	@Override
 	public Atendente busca(Atendente at) {
-		// TODO Auto-generated method stub
-		return null;
+		EntityManager entityManager = sf.createEntityManager();
+		at = entityManager.find(Atendente.class, at.getId());
+		return at;
 	}
 
 	@Override
 	public List<Atendente> lista() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Atendente> atendentes = new ArrayList<Atendente>();
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("SELECT f.*, a.hora_entrada, a.hora_saida, a.email ");
+		buffer.append("FROM atendente a ");
+		buffer.append("LEFT JOIN funcionario f ON f.id = a.id");
+		buffer.append("ORDER BY a.id");
+		EntityManager entityManager = sf.createEntityManager();
+		Query query = entityManager.createNativeQuery(buffer.toString());
+		List<Object[]> lista = query.getResultList();
+		for (Object[] obj : lista) {
+			Atendente at = new Atendente();
+			at.setId(Integer.parseInt(obj[0]));
+			at.setNome(obj[1].toString());
+			at.setDataNascimento(obj[2].toString());
+			at.setSalario(Float.parseFloat(obj[3]));
+			at.setTelefone(obj[4].toString());
+			at.setHoraEntrada(obj[5].toString());
+			at.setHoraSaida(obj[6].toString());
+			at.setEmail(obj[7].toString());
+			
+			atendentes.add(at);
+		}
+		
+		return atendentes;
 	}
 
 }
