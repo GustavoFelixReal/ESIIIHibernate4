@@ -12,7 +12,7 @@ public class PrincipalAtendente {
 
 	public static void main(String[] args) {
 		SessionFactory sf = HibernateUtil.getSessionFactory();
-		
+
 		Atendente at = new Atendente();
 		at.setId(2);
 		at.setNome("Petr Cech");
@@ -22,9 +22,12 @@ public class PrincipalAtendente {
 		at.setEmail("petr@empresa.com");
 		at.setHoraEntrada(9);
 		at.setHoraSaida(18);
-		
+
 		AtendenteDao atDao = new AtendenteDao(sf);
-		atDao.insere(at);
+		// atDao.insere(at);
+
+		java.util.List<Atendente> lista = atDao.lista();
+		lista.forEach(atendente -> System.out.println(atendente));
 	}
 
 }

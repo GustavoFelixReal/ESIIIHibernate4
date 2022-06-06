@@ -1,13 +1,20 @@
 package persistence;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.SessionFactory;
+
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.Query;
 import model.Entregador;
 
 public class EntregdorDao implements IObjDao<Entregador> {
-	
+
 	private SessionFactory sf;
-	
+
 	public EntregdorDao(SessionFactory sf) {
 		this.sf = sf;
 	}
@@ -18,7 +25,7 @@ public class EntregdorDao implements IObjDao<Entregador> {
 		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
 		entityManager.persist(en);
-		transaction.commit();		
+		transaction.commit();
 	}
 
 	@Override
@@ -27,7 +34,7 @@ public class EntregdorDao implements IObjDao<Entregador> {
 		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
 		entityManager.merge(en);
-		transaction.commit();		
+		transaction.commit();
 	}
 
 	@Override
@@ -36,7 +43,7 @@ public class EntregdorDao implements IObjDao<Entregador> {
 		EntityTransaction transaction = entityManager.getTransaction();
 		transaction.begin();
 		entityManager.remove(en);
-		transaction.commit();		
+		transaction.commit();
 	}
 
 	@Override
@@ -46,6 +53,7 @@ public class EntregdorDao implements IObjDao<Entregador> {
 		return en;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Entregador> lista() {
 		List<Entregador> entregadores = new ArrayList<Entregador>();
@@ -59,17 +67,17 @@ public class EntregdorDao implements IObjDao<Entregador> {
 		List<Object[]> lista = query.getResultList();
 		for (Object[] obj : lista) {
 			Entregador en = new Entregador();
-			en.setId(Integer.parseInt(obj[0]));
+			en.setId(Integer.parseInt(obj[0].toString()));
 			en.setNome(obj[1].toString());
-			en.setDataNascimento(obj[2].toString());
-			en.setSalario(Float.parseFloat(obj[3]));
+			en.setDataNascimento(LocalDate.parse(obj[2].toString()));
+			en.setSalario(Float.parseFloat(obj[3].toString()));
 			en.setTelefone(obj[4].toString());
 			en.setNumCnh(obj[5].toString());
 			en.setCategoriaCnh(obj[6].toString());
-			
+
 			entregadores.add(en);
 		}
-		
+
 		return entregadores;
 	}
 

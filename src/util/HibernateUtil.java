@@ -14,11 +14,10 @@ import model.Cliente;
 import model.Entregador;
 import model.Funcionario;
 
-
 public class HibernateUtil {
-	
+
 	private static SessionFactory sessionFactory;
-	
+
 	public static SessionFactory getSessionFactory() {
 		if (sessionFactory == null) {
 			try {
@@ -27,21 +26,21 @@ public class HibernateUtil {
 				prop.put(Environment.DRIVER, "com.mysql.cj.jdbc.Driver");
 				prop.put(Environment.URL, "jdbc:mysql://localhost:3306/exercicio1?createDatabaseIfNotExist=true");
 				prop.put(Environment.USER, "root");
-				prop.put(Environment.PASS, "P4ssw0rd");
+				prop.put(Environment.PASS, "root");
 				prop.put(Environment.DIALECT, "org.hibernate.dialect.MySQLDialect");
 				prop.put(Environment.SHOW_SQL, "true");
 				prop.put(Environment.HBM2DDL_AUTO, "update");
-				
+
 				configuration.addProperties(prop);
 				configuration.addAnnotatedClass(Cliente.class);
 				configuration.addAnnotatedClass(Funcionario.class);
 				configuration.addAnnotatedClass(Atendente.class);
 				configuration.addAnnotatedClass(Entregador.class);
 				configuration.addAnnotatedClass(Atendimento.class);
-				
+
 				ServiceRegistry registry = new StandardServiceRegistryBuilder()
-											.applySettings(configuration.getProperties())
-											.build();
+						.applySettings(configuration.getProperties())
+						.build();
 				sessionFactory = configuration.buildSessionFactory(registry);
 			} catch (Exception e) {
 				e.printStackTrace();
